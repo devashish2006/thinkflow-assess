@@ -1,534 +1,461 @@
-# Maventic Insight
+# Maventic Assess
 
-Build a very simple but fully working MVP called **"Maventic Assess"**.
+> Evaluate how candidates think, not just how their code runs.
 
-The goal is to demonstrate one core idea:
+Maventic Assess is an AI-powered coding assessment MVP designed for campus hiring.
 
-> A student can write pseudocode/thought process and imperfect code, and an AI evaluates the solution based on reasoning and gives a REAL score out of 100.
+Unlike traditional coding platforms that primarily evaluate candidates using compiler output and test cases, Maventic Assess evaluates the candidate's problem-solving approach, pseudocode, reasoning, and code logic.
 
-Keep this MVP extremely simple so it can be completed within limited Lovable credits.
+The goal is to identify candidates who may make minor implementation mistakes but demonstrate strong problem-solving ability.
 
-Do NOT build a complex enterprise system.
+---
 
-==================================================
-TECH STACK
-==========
+## MVP
 
-Use:
+The current MVP focuses on one complete assessment flow:
 
-* React / TypeScript
+```text
+Student Login
+      ↓
+Start DSA Test
+      ↓
+Read Question
+      ↓
+Write Thought Process / Pseudocode
+      ↓
+Write Code
+      ↓
+Submit
+      ↓
+Groq AI Evaluation
+      ↓
+Score / 100
+      ↓
+Shortlisted / Not Shortlisted
+      ↓
+Admin Reviews Result
+```
+
+### Current MVP Features
+
+* Hardcoded Admin login
+* Hardcoded Student login
+* Hardcoded DSA test
+* Hardcoded DSA question
+* Simple pseudocode/thought-process editor
+* Simple code editor
+* Programming language selection
+* Test submission
+* Groq AI evaluation
+* AI-generated score out of 100
+* Detailed score breakdown
+* AI feedback
+* Candidate strengths and weaknesses
+* Supabase persistence
+* Admin result dashboard
+* Shortlisting based on score
+
+---
+
+## Tech Stack
+
+### Frontend
+
+* React
+* TypeScript
 * Tailwind CSS
+* shadcn/ui
+
+### Backend / Database
+
 * Supabase
+* PostgreSQL
+
+### AI
+
 * Groq API
-* Simple textarea-based editor
+* Model: `llama-3.3-70b-versatile`
 
-Do NOT use Monaco Editor.
+### Editor
 
-The code editor can simply be a large textarea styled like a code editor.
-
-==================================================
-LOGIN
-=====
-
-Do NOT build real authentication for this MVP.
-
-Use a simple hardcoded login screen.
-
-Admin credentials:
-
-Email:
-[admin@maventic.com](mailto:admin@maventic.com)
-
-Password:
-admin123
-
-Student credentials:
-
-Email:
-[student@maventic.com](mailto:student@maventic.com)
-
-Password:
-student123
-
-After login:
-
-Admin → Admin Dashboard
-
-Student → Student Dashboard
-
-==================================================
-STUDENT DASHBOARD
-=================
-
-Show one hardcoded test:
-
-Maventic DSA Screening Test
-
-College:
-Oriental Institute of Science and Technology
-
-Duration:
-60 Minutes
-
-Questions:
-1
-
-Passing Score:
-70
-
-Button:
-
-[ Start Test ]
-
-==================================================
-QUESTION
-========
-
-Use ONE hardcoded DSA question.
-
-Question:
-
-"Given an array of integers and a target integer, find two numbers whose sum equals the target. Return their indices."
-
-Expected approach:
-
-HashMap
-
-Difficulty:
-
-Easy
-
-Do not create a question management system.
-
-The question can simply be stored in the code for this MVP.
-
-==================================================
-TEST SCREEN
-===========
-
-Create a simple clean test interface.
-
-Show:
-
-Question
-
-Problem Description
-
-Then two editors:
+For the MVP, a simple textarea-based editor is used instead of a full code execution environment.
 
 ---
 
-## THOUGHT PROCESS / PSEUDOCODE
+## AI Evaluation
 
-Large textarea.
+The main purpose of Maventic Assess is to evaluate how a candidate thinks rather than simply checking whether their code passes test cases.
 
-Placeholder:
+The AI receives:
 
-"Explain how you would solve this problem..."
-
----
-
-## CODE
-
-Large textarea.
-
-Placeholder:
-
-"Write your solution here..."
-
-Also provide:
-
-Language:
-
-JavaScript
-Python
-Java
-C++
-C
-
-Use a simple dropdown.
-
-No code execution.
-
-No compiler.
-
-No test cases.
-
-No Run button.
-
-The purpose is only to capture what the candidate thinks and writes.
-
-==================================================
-SUBMIT
-======
-
-Button:
-
-[ Submit Solution ]
-
-Before submitting show confirmation:
-
-"Are you sure? You cannot edit your solution after submission."
-
-After submission:
-
-* Disable the editors
-* Send the question + expected approach + pseudocode + code + language to Groq
-* Wait for AI evaluation
-* Show a loading state:
-
-"AI is evaluating your solution..."
-
-==================================================
-GROQ AI
-=======
-
-DO NOT USE OPENAI.
-
-Use Groq.
-
-Endpoint:
-
-https://api.groq.com/openai/v1/chat/completions
-
-Model:
-
-llama-3.3-70b-versatile
-
-Use environment variable:
-
-GROQ_API_KEY
-
-IMPORTANT:
-
-Never expose GROQ_API_KEY in frontend code.
-
-Call Groq only from a secure server-side function/API route.
-
-==================================================
-AI EVALUATION
-=============
-
-The AI should evaluate the student's actual submission.
-
-Do NOT hardcode the score.
-
-Do NOT create fake AI responses.
-
-Send:
-
-Question
+```text
+Problem
 Expected Approach
-Student Pseudocode
-Student Code
+Candidate Thought Process / Pseudocode
+Candidate Code
 Programming Language
+```
 
-Evaluate using:
+The candidate is evaluated using the following rubric:
 
-Understanding: 20
-Approach: 20
-Pseudocode / Thought Process: 20
-Code Logic: 20
-Correctness: 10
-Complexity: 5
-Edge Cases: 5
+| Criteria                     |   Marks |
+| ---------------------------- | ------: |
+| Understanding                |      20 |
+| Approach                     |      20 |
+| Pseudocode / Thought Process |      20 |
+| Code Logic                   |      20 |
+| Correctness                  |      10 |
+| Complexity                   |       5 |
+| Edge Cases                   |       5 |
+| **Total**                    | **100** |
 
-Total = 100
+### Evaluation Principle
 
-Important evaluation rule:
-
-The purpose of this platform is NOT to check whether the code compiles perfectly.
-
-Minor syntax errors should NOT heavily reduce the score if the algorithm and reasoning are correct.
+Minor syntax or implementation mistakes should not automatically result in a failing score.
 
 For example:
 
-* missing semicolon
-* minor syntax error
-* small typo
-* incomplete syntax
+```text
+Correct algorithm
++
+Correct reasoning
++
+Minor syntax bug
+```
 
-should not cause a logically correct solution to receive a very low score.
+should still receive a reasonably good score.
 
 However:
 
-* wrong algorithm
-* incorrect reasoning
-* fundamental logical errors
+```text
+Wrong algorithm
++
+Wrong reasoning
++
+Fundamental misunderstanding
+```
 
-should significantly reduce the score.
+should receive a significantly lower score.
 
-==================================================
-AI RESPONSE
-===========
+---
 
-Ask Groq to return ONLY JSON:
+## Shortlisting
 
-{
-"understanding": 18,
-"approach": 19,
-"pseudocode": 18,
-"logic": 17,
-"correctness": 9,
-"complexity": 5,
-"edge_cases": 4,
-"total": 90,
-"recommendation": "SHORTLISTED",
-"feedback": "Strong understanding and correct approach.",
-"strengths": [
-"Correct HashMap approach",
-"Good reasoning"
-],
-"weaknesses": [
-"Missed one edge case"
-]
-}
+The MVP uses a simple threshold:
 
-The application must calculate/verify the total score from the returned criteria rather than trusting a hardcoded score.
-
-==================================================
-RESULT PAGE
-===========
-
-After AI evaluation show:
-
-YOUR RESULT
-
-Score:
-
-90 / 100
-
-Status:
-
+```text
+Score >= 70
+        ↓
 SHORTLISTED
 
-if score >= 70
-
-otherwise:
-
+Score < 70
+        ↓
 NOT SHORTLISTED
+```
 
-Show the complete breakdown:
+The score is generated by the AI and stored in Supabase.
 
-Understanding
-18 / 20
+The score is not hardcoded.
 
-Approach
-19 / 20
+---
 
-Pseudocode
-18 / 20
+## Demo Login
 
-Code Logic
-17 / 20
+### Admin
 
-Correctness
-9 / 10
+```text
+Email:
+admin@maventic.com
 
-Complexity
-5 / 5
+Password:
+admin123
+```
 
-Edge Cases
-4 / 5
+### Student
 
-Total
-90 / 100
+```text
+Email:
+student@maventic.com
 
-Then show:
+Password:
+student123
+```
 
-AI Feedback
+These credentials are intended only for the MVP/demo environment.
 
-Strengths
+---
 
-Weaknesses
+## Demo Test
 
-==================================================
-ADMIN DASHBOARD
-===============
+### Test
 
-Create a very simple admin dashboard.
-
-Show:
-
+```text
 Maventic DSA Screening Test
+```
 
-Candidate Results
+### College
 
-Student Name
-Score
-Status
+```text
+Oriental Institute of Science and Technology
+```
 
-The demo student should appear after submitting.
+### Duration
 
-Clicking the candidate should show:
+```text
+60 minutes
+```
 
+### Passing Score
+
+```text
+70
+```
+
+### Question
+
+**Two Sum**
+
+Given an array of integers and a target integer, find two numbers whose sum equals the target and return their indices.
+
+### Expected Approach
+
+```text
+HashMap
+```
+
+---
+
+## Environment Variables
+
+Create a `.env` file locally:
+
+```env
+GROQ_API_KEY=your_groq_api_key
+
+VITE_SUPABASE_URL=your_supabase_url
+VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+```
+
+If the project uses different Supabase environment variable names, use the names already configured in the project.
+
+### Important
+
+Never commit API keys to GitHub.
+
+In particular:
+
+```text
+GROQ_API_KEY
+```
+
+must remain server-side and must never be exposed through frontend code.
+
+---
+
+## Local Development
+
+Clone the repository:
+
+```bash
+git clone https://github.com/<your-username>/<repository-name>.git
+```
+
+Go into the project:
+
+```bash
+cd <repository-name>
+```
+
+Install dependencies:
+
+```bash
+npm install
+```
+
+Create your environment file:
+
+```text
+.env
+```
+
+Add the required environment variables.
+
+Start the development server:
+
+```bash
+npm run dev
+```
+
+The application should then be available at:
+
+```text
+http://localhost:5173
+```
+
+---
+
+## Supabase
+
+Supabase is used to store:
+
+* Student submissions
 * Pseudocode
 * Code
+* Programming language
 * AI score
 * Score breakdown
 * AI feedback
+* Strengths
+* Weaknesses
 
-Do NOT build college management.
+The MVP intentionally keeps the database simple.
 
-Do NOT build test creation.
+---
 
-Do NOT build question creation.
+## Core Data
 
-Do NOT build Round 2.
+The main submission structure is:
 
-Do NOT build registration workflows.
-
-Everything except the AI evaluation and candidate submission can be hardcoded for this MVP.
-
-==================================================
-DATABASE
-========
-
-Use Supabase only to persist the actual student submission and AI evaluation.
-
-Create a simple table:
-
-submissions
-
-id
-student_name
-question
-pseudocode
-code
-language
-
-understanding_score
-approach_score
-pseudocode_score
-logic_score
-correctness_score
-complexity_score
-edge_case_score
-
-total_score
-recommendation
-feedback
-strengths
-weaknesses
-
-created_at
-
-The score stored in the database MUST be the actual score returned/evaluated by Groq.
-
-Do NOT hardcode the score.
-
-==================================================
-UI
-==
-
-Keep the design simple and professional.
-
-Brand:
-
-Maventic Assess
-
-Tagline:
-
-"Evaluate how candidates think, not just how their code runs."
-
-Use:
-
-* White/dark professional interface
-* Blue accent
-* Clean cards
-* Simple navigation
-* Good typography
-* Responsive layout
-
-Do not spend credits on complicated animations or unnecessary components.
-
-==================================================
-MOST IMPORTANT REQUIREMENT
-==========================
-
-The following flow MUST actually work:
-
-Student Login
-↓
-Start Test
-↓
-See DSA Question
-↓
-Write Thought Process
-↓
-Write Code
-↓
-Submit
-↓
-Groq API
-↓
-llama-3.3-70b-versatile
-↓
-REAL AI evaluation
-↓
-REAL score out of 100
-↓
-Score stored in Supabase
-↓
-Student sees result
-↓
-Admin sees candidate result
-
-Do NOT use mock AI responses.
-
-Do NOT hardcode the score.
-
-Do NOT fake the AI evaluation.
-
-The only hardcoded parts should be:
-
-* Admin login
-* Student login
-* College
-* Test
-* Question
-* Expected approach
-
-The editor content, submission, AI evaluation, score and result must be dynamic.
-
-==================================================
-FINAL REQUIREMENT
-=================
-
-Build this MVP completely.
-
-Prioritize functionality over design.
-
-Do not add features that are not requested.
-
-Do not stop at creating the UI.
-
-Make sure:
-
-Student submits → Groq evaluates → real score is generated → Supabase stores it → result appears on Student and Admin dashboards.
-
-After completing the MVP, provide the deployed URL and explain where I need to add the GROQ_API_KEY.
-api key - @secret:GROQ_API_KEY
-
-This project was built with [Lovable](https://lovable.dev).
-
-**Live app**: https://thinkflow-assess.lovable.app
-
-## Build with Lovable
-
-Continue developing this project in the [Lovable editor](https://lovable.dev/projects/3b810d11-02d9-4060-aa7b-bd08ce9d6dd1).
-
-- **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: every change made in Lovable is committed straight to this repository.
-- **Full ownership**: this code is yours. Push to `main` on GitHub and your changes sync back into Lovable, ready for your next prompt.
-
-## Development
-
-Prefer working locally? You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
-
-```sh
-git clone <this-repository-url>
-cd <repository-name>
-npm i
-npm run dev
+```text
+Submission
+│
+├── Student
+├── Question
+├── Pseudocode
+├── Code
+├── Language
+│
+└── AI Evaluation
+    ├── Understanding
+    ├── Approach
+    ├── Pseudocode
+    ├── Code Logic
+    ├── Correctness
+    ├── Complexity
+    ├── Edge Cases
+    ├── Total Score
+    ├── Recommendation
+    ├── Feedback
+    ├── Strengths
+    └── Weaknesses
 ```
+
+---
+
+## AI Evaluation Flow
+
+When a student submits:
+
+```text
+Student Submission
+       ↓
+Server-side Evaluation API
+       ↓
+Groq API
+       ↓
+llama-3.3-70b-versatile
+       ↓
+Structured JSON
+       ↓
+Validate Response
+       ↓
+Calculate Score
+       ↓
+Save to Supabase
+       ↓
+Display Result
+```
+
+The application should never trust a score supplied by the frontend.
+
+---
+
+## Purpose of the MVP
+
+This MVP is designed to validate one core hypothesis:
+
+> Can AI evaluate a candidate's problem-solving ability even when their final code is not 100% correct?
+
+Traditional coding platforms generally focus on:
+
+```text
+Code
+ ↓
+Compile
+ ↓
+Test Cases
+ ↓
+Pass / Fail
+```
+
+Maventic Assess experiments with:
+
+```text
+Problem
+ ↓
+Thought Process
+ ↓
+Pseudocode
+ ↓
+Code
+ ↓
+AI Evaluation
+ ↓
+Human-readable Score
+```
+
+---
+
+## Future Development
+
+The current version intentionally does not include:
+
+* Multiple hiring rounds
+* College management
+* Dynamic test creation
+* Dynamic question bank
+* Code execution
+* Test cases
+* Plagiarism detection
+* AI proctoring
+* Webcam monitoring
+* Email/SMS notifications
+* Advanced analytics
+* Resume parsing
+* Interview scheduling
+
+These can be added after the MVP successfully validates the core AI evaluation concept.
+
+---
+
+## Future Architecture
+
+The planned full platform will eventually support:
+
+```text
+Company
+   ↓
+College
+   ↓
+Hiring Drive
+   ↓
+Round 1
+   ↓
+AI Evaluation
+   ↓
+Shortlisting
+   ↓
+Round 2
+   ↓
+AI Evaluation
+   ↓
+Final Shortlist
+```
+
+---
+
+## Project Status
+
+**MVP / Proof of Concept**
+
+The primary goal at this stage is validating the end-to-end AI-powered assessment workflow rather than building the complete enterprise hiring platform.
